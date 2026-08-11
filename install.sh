@@ -63,13 +63,13 @@ echo
 read -r -p "VMess-Argo 域名: " VMESS_DOMAIN
 read -r -p "VMess-Argo 本地端口 [22521]: " x
 VMESS_PORT="${x:-22521}"
-read -r -s -p "VMess Cloudflare Tunnel Token: " VMESS_TOKEN
+read -r -p "VMess Cloudflare Tunnel Token: " VMESS_TOKEN
 echo
 
 read -r -p "VLESS-Argo 域名: " VLESS_DOMAIN
 read -r -p "VLESS-Argo 本地端口 [39660]: " x
 VLESS_PORT="${x:-39660}"
-read -r -s -p "VLESS Cloudflare Tunnel Token: " VLESS_TOKEN
+read -r -p "VLESS Cloudflare Tunnel Token: " VLESS_TOKEN
 echo
 
 read -r -p "HY2 端口 [8443]: " x
@@ -332,7 +332,9 @@ else
     systemctl disable --now hysteria2 >/dev/null 2>&1 || true
 fi
 
-VMESS_URI="vmess://$(python3 - "$UUID" "$VMESS_DOMAIN" "$VMESS_PORT" <<'PY'
+VMESS_PUBLIC_PORT="443"
+
+VMESS_URI="vmess://$(python3 - "$UUID" "$VMESS_DOMAIN" "$VMESS_PUBLIC_PORT" <<'PY'
 import base64,json,sys
 u,host,port=sys.argv[1],sys.argv[2],sys.argv[3]
 obj={
